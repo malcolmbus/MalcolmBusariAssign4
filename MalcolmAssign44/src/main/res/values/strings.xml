@@ -3,4 +3,6 @@
 <!--    Section: 1211_34780-->
 <resources>
     <string name="app_name">MalcolmBusari991523264</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
