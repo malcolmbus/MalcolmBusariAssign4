@@ -12,6 +12,11 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -63,7 +68,11 @@ public class HomeFrag extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        TextView textView = view.findViewById(R.id.malcolmDateTimeTV);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yy hh.mm.a");
+        String currentDateTime = dateFormat.format(new Date());
+        textView.setText(currentDateTime);
+        return view;
     }
 }
