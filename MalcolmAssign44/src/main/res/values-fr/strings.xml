@@ -5,4 +5,6 @@
     <string name="app_name">MalcolmBusari991523264</string>
     <string name="fullname">Malcolm Busari</string>
     <string name="student_id">991523264</string>
+    <string name="image_spinner">Select an image to download:</string>
+    <string name="download">Download</string>
 </resources>
