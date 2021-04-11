@@ -5,9 +5,9 @@
     <string name="app_name">MalcolmBusari991523264</string>
     <string name="fullname">Malcolm Busari</string>
     <string name="student_id">991523264</string>
-    <string name="image_spinner">Select an image to download:</string>
-    <string name="download">Download</string>
-    <string name="enter_zip_code">Enter ZIP Code</string>
+    <string name="image_spinner">Sélectionnez une image à télécharger:</string>
+    <string name="download">Télécharger</string>
+    <string name="enter_zip_code">Entrer le code postal</string>
     <string name="web_services">Web Services</string>
     <string name="textview">TextView</string>
     <string name="prompt">"Are you sure you want to exit this application?"</string>
