@@ -5,8 +5,10 @@ package malcolm.busari.s991523264;
  * Section: 1211_34780
  */
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -73,6 +75,28 @@ public class HomeFrag extends Fragment {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yy hh.mm.a");
         String currentDateTime = dateFormat.format(new Date());
         textView.setText(currentDateTime);
+
+        requireActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getView().getContext())
+                        .setTitle(R.string.app_name)
+                        .setMessage(R.string.prompt)
+                        .setIcon(R.drawable.alerticon)
+                        .setCancelable(true);
+                builder.setPositiveButton(
+                        R.string.yes,
+                        (dialog, id) -> {
+                            getActivity().finish();
+                            System.exit(0);
+                        });
+                builder.setNegativeButton(
+                        R.string.no,
+                        (dialog, id) -> dialog.cancel());
+                AlertDialog alert = builder.create();
+                alert.show();
+            }
+        });
         return view;
     }
 }

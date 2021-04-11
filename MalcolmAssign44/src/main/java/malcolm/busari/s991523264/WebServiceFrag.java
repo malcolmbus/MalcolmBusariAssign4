@@ -5,9 +5,11 @@ package malcolm.busari.s991523264;
  * Section: 1211_34780
  */
 
+import android.app.AlertDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -93,8 +95,32 @@ public class WebServiceFrag extends Fragment {
                 getWeather(view);
             }
         });
+
+        requireActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getView().getContext())
+                        .setTitle(R.string.app_name)
+                        .setMessage(R.string.prompt)
+                        .setIcon(R.drawable.alerticon)
+                        .setCancelable(true);
+                builder.setPositiveButton(
+                        R.string.yes,
+                        (dialog, id) -> {
+                            getActivity().finish();
+                            System.exit(0);
+                        });
+                builder.setNegativeButton(
+                        R.string.no,
+                        (dialog, id) -> dialog.cancel());
+                AlertDialog alert = builder.create();
+                alert.show();
+            }
+        });
         return view;
     }
+
+
 
     public void getWeather(View view)
     {
@@ -156,10 +182,7 @@ public class WebServiceFrag extends Fragment {
                 }
                 JSONObject dataObject= weatherJson.getJSONObject("main");
                 strResults +="\ntemp: "+dataObject.getString("temp");
-//                strResults +="\nlon: "+dataObject.getString("lon");
-//                strResults +="\nlat: "+dataObject.getString("lat");
                 strResults +="\nhumidity: "+dataObject.getString("humidity");
-//                strResults +="\nname: "+dataObject.getString("name");
                 textView.setText(strResults);
             } catch (Exception e) {
                 e.printStackTrace();
