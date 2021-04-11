@@ -7,4 +7,7 @@
     <string name="student_id">991523264</string>
     <string name="image_spinner">Select an image to download:</string>
     <string name="download">Download</string>
+    <string name="enter_zip_code">Enter ZIP Code</string>
+    <string name="web_services">Web Services</string>
+    <string name="textview">TextView</string>
 </resources>
