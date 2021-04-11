@@ -5,13 +5,30 @@ package malcolm.busari.s991523264;
  * Section: 1211_34780
  */
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -19,6 +36,8 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class WebServiceFrag extends Fragment {
+
+    TextView textView;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -64,6 +83,87 @@ public class WebServiceFrag extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_web_service, container, false);
+        textView = view.findViewById(R.id.malcolmWebServiceTV2);
+        EditText editText = view.findViewById(R.id.malcolmWebServiceET);
+        editText.setError("Zip Code must not be more than 5 digits");
+        Button button = view.findViewById(R.id.malcolmWebServiceBtn);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getWeather(view);
+            }
+        });
         return view;
+    }
+
+    public void getWeather(View view)
+    {
+        EditText txtZip = view.findViewById(R.id.malcolmWebServiceET);
+        String zipCode = txtZip.getText().toString();
+
+        String url = "https://api.openweathermap.org/data/2.5/weather?";
+        url+="zip="+zipCode;
+        url+="&appid=b80f6f5167c80356df75e150f49b0952";
+        Log.d("URL",url);
+        new ReadJSONFeedTask().execute(url);
+    }
+
+    public String readJSONFeed(String address) {
+        URL url = null;
+        try {
+            url = new URL(address);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        };
+        StringBuilder stringBuilder = new StringBuilder();
+        HttpURLConnection urlConnection = null;
+        try {
+            urlConnection = (HttpURLConnection) url.openConnection();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            InputStream content = new BufferedInputStream(
+                    urlConnection.getInputStream());
+            BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(content));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                stringBuilder.append(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            urlConnection.disconnect();
+        }
+        return stringBuilder.toString();
+    }
+
+    private class ReadJSONFeedTask extends AsyncTask<String, Void, String> {
+        protected String doInBackground(String... urls) {
+            return readJSONFeed(urls[0]);
+        }
+        protected void onPostExecute(String result) {
+            try {
+                JSONObject weatherJson = new JSONObject(result);
+                JSONArray dataArray1= weatherJson.getJSONArray("weather");
+                String strResults="Weather\n";
+                for (int i = 0; i < dataArray1.length(); i++) {
+                    JSONObject jsonObject = dataArray1.getJSONObject(i);
+                    strResults +="id: "+jsonObject.getString("id");
+                    strResults +="\nmain: "+jsonObject.getString("main");
+                    strResults +="\ndescription: "+jsonObject.getString("description");
+                }
+                JSONObject dataObject= weatherJson.getJSONObject("main");
+                strResults +="\ntemp: "+dataObject.getString("temp");
+//                strResults +="\nlon: "+dataObject.getString("lon");
+//                strResults +="\nlat: "+dataObject.getString("lat");
+                strResults +="\nhumidity: "+dataObject.getString("humidity");
+//                strResults +="\nname: "+dataObject.getString("name");
+                textView.setText(strResults);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
